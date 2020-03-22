@@ -1,0 +1,12 @@
+/cmake-build-*
+/.vs
+.vscode
+*.idea/
+/build/
+*.gradle/
+*local.properties
+_venv
+__pycache__
+.DS_Store
+/.vscode
+/venv
