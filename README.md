@@ -1,4 +1,4 @@
-# Processing tool for Python3
+# Processing tools for Python3
 
 ## Requirements
 - [Pillow](https://pypi.org/project/Pillow/) `pip3 install pillow`
