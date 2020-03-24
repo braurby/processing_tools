@@ -14,6 +14,6 @@ Arguments:
 
 **Example**  
 - Process files from folders:  
-`"./test_images/test1 ./test_images/test2 ./test_images/test3" -c "caption_1 | caption_2 | caption_3"`
+`./process_tools.py "./test_images/test1 ./test_images/test2 ./test_images/test3" -c "caption_1 | caption_2 | caption_3"`
 - Process selected files and set output:  
-`"./videos/file_1.mp4 ./videos/file_2.mp4" -o ./some_folder`
+`./process_tools.py "./videos/file_1.mp4 ./videos/file_2.mp4" -o ./some_folder`
