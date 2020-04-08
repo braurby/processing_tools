@@ -6,15 +6,20 @@ from PIL import ImageDraw
 
 def print_text(image, text):
     """Prints text on an image"""
-    W = image.size[0]
-    draw = ImageDraw.Draw(image)
-    font = ImageFont.truetype("Arial.ttf", 64)
+    base = image.convert('RGBA')
+    txt = Image.new('RGBA', base.size, (255, 255, 255, 0))
+    W = base.size[0]
+
+    draw = ImageDraw.Draw(txt)
+    font = ImageFont.truetype("Arial.ttf", 48)
     w, h = draw.textsize(text, font=font)
 
-    draw.rectangle((((W-w)/2 - 10, 15), (w * 1.85, h + 10)), fill="black")
+    draw.rectangle((((W-w)/2 - 10, 15), ((W + w)/2 + 10, h + 10)), fill=(255, 255, 255, 150))
     draw.text(((W-w)/2, 10), text, (252, 3, 3), font=font)
 
-    return image
+    out = Image.alpha_composite(base, txt)
+
+    return out
 
 
 def merge_images(locations, output, text=None):
