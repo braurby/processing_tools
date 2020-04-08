@@ -8,14 +8,16 @@ def print_text(image, text):
     """Prints text on an image"""
     W = image.size[0]
     draw = ImageDraw.Draw(image)
-    font = ImageFont.truetype("Arial.ttf", 32)
-    w = draw.textsize(text)[0]
+    font = ImageFont.truetype("Arial.ttf", 64)
+    w, h = draw.textsize(text, font=font)
+
+    draw.rectangle((((W-w)/2 - 10, 15), (w * 1.85, h + 10)), fill="black")
     draw.text(((W-w)/2, 10), text, (252, 3, 3), font=font)
 
     return image
 
 
-def merge_images(locations, output, text=[]):
+def merge_images(locations, output, text=None):
     # Define images
     images = []
     sizes = []
@@ -51,4 +53,4 @@ def merge_images(locations, output, text=[]):
         x_offset += im.size[0]
 
     new_im.save(output / Path(locations[0]).name)
-    print(f'\tImage {Path(locations[0]).name} saved to {output} folder.')
+    print(f'\tImage {Path(locations[0]).name} saved to {str(output)} folder.')

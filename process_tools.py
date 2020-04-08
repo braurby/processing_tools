@@ -12,9 +12,6 @@ IMG_FORMATS = ['.jpeg', '.jpg', '.png', '.gif']
 VID_FORMATS = ['.mov', '.mp4', '.avi']
 OUTPUT_FOLDER = 'output'
 
-# IMG_LOCS = []
-# VID_LOCS = []
-
 if __name__ == '__main__':
     # Parse arguments
     parser = argparse.ArgumentParser()
@@ -67,7 +64,7 @@ if __name__ == '__main__':
             print('Unknown file format.')
     else:
         # Define output folder
-        output = args.output if args.output else Path(locs[0]).parent / OUTPUT_FOLDER
+        output = Path(args.output) if args.output else Path(locs[0]).parent / OUTPUT_FOLDER
         # Create output folder if not exists
         os.makedirs(output, exist_ok=True)
 
@@ -76,7 +73,7 @@ if __name__ == '__main__':
             img_locs = []
             vid_locs = []
 
-            if item.is_file() and item.suffix in IMG_FORMATS:
+            if item.is_file() and item.suffix.lower() in IMG_FORMATS:
                 for location in locs:
                     img_locs.append(Path(location) / Path(item.name))
 
