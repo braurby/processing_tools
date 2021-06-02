@@ -29,7 +29,7 @@ def merge_videos(locations, output, text=[]):
     for i in locations:
         videos.append(ffmpeg.input(i))
 
-    output = output / Path(locations[0]).name
+    output = Path(output) / Path(locations[0]).name
 
     if text:
         (
