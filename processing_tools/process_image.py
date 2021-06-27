@@ -11,7 +11,7 @@ def print_text(image, text):
     W = base.size[0]
 
     draw = ImageDraw.Draw(txt)
-    font = ImageFont.truetype("Arial.ttf", 48)
+    font = ImageFont.truetype("arial.ttf", 48)
     w, h = draw.textsize(text, font=font)
 
     draw.rectangle((((W-w)/2 - 10, 15), ((W + w)/2 + 10, h + 10)), fill=(255, 255, 255, 150))
@@ -25,6 +25,7 @@ def print_text(image, text):
 def merge_images(locations, output, text=None):
     # Define images
     images = []
+    images_resized = []
     sizes = []
 
     for loc in locations:
