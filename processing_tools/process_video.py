@@ -36,7 +36,7 @@ def merge_videos(locations, output, text=[]):
             ffmpeg
             .filter(videos, 'hstack', len(videos))  # hstack - horizontal, vstack - vertical
             .drawtext(
-                fontfile='C:/Windows/Fonts/Arial.ttf',
+                fontfile='/Library/Fonts/Verdana.ttf',
                 text=text,
                 fontcolor='white',
                 fontsize=48,

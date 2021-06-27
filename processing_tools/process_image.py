@@ -11,7 +11,7 @@ def print_text(image, text):
     W = base.size[0]
 
     draw = ImageDraw.Draw(txt)
-    font = ImageFont.truetype("arial.ttf", 48)
+    font = ImageFont.truetype("Arial.ttf", 48)
     w, h = draw.textsize(text, font=font)
 
     draw.rectangle((((W-w)/2 - 10, 15), ((W + w)/2 + 10, h + 10)), fill=(255, 255, 255, 150))
@@ -31,32 +31,38 @@ def merge_images(locations, output, text=None):
     for loc in locations:
         try:
             image = Image.open(loc)
-
-            # Resize images to the same values
-            if not sizes:
-                sizes = image.size
-            if image.size is not sizes:
-                image = image.resize(sizes)
-
             images.append(image)
+            sizes.append(image.size)
         except OSError:
             print(f'File not an image: {loc.name}')
             continue
 
+    # Resize images to minimal in collection
+    sizes.sort()
+
+    if sizes[0] == sizes[-1]:
+        # skip resize if all images have equal size
+        images_resized = images
+    else:
+        for img in images:
+            if img.size[0] > sizes[0][0]:
+                img = img.resize(sizes[0])
+            images_resized.append(img)
+
     # Print text on image
     if text:
-        for i in range(len(images)):
-            images[i] = print_text(images[i], text[i])
+        for i in range(len(images_resized)):
+            images[i] = print_text(images_resized[i], text[i])
 
-    widths, heights = zip(*(i.size for i in images))
+    widths, heights = zip(*(i.size for i in images_resized))
     total_width = sum(widths)
     max_height = max(heights)
     new_im = Image.new('RGB', (total_width, max_height))
     x_offset = 0
 
-    for im in images:
+    for im in images_resized:
         new_im.paste(im, (x_offset, 0))
         x_offset += im.size[0]
 
-    new_im.save(output / Path(locations[0]).name)
+    new_im.save(Path(output) / Path(locations[0]).name)
     print(f'\tImage {Path(locations[0]).name} saved to {str(output)} folder.')
