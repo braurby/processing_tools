@@ -12,28 +12,8 @@ IMG_FORMATS = ['.jpeg', '.jpg', '.png', '.gif']
 VID_FORMATS = ['.mov', '.mp4', '.avi']
 OUTPUT_FOLDER = 'output'
 
-if __name__ == '__main__':
-    # Parse arguments
-    parser = argparse.ArgumentParser()
-    parser.add_argument('location', help='Locations of files or folder with multiple files.')
-    parser.add_argument('-o', '--output', help='Output folder location. '
-                                               'If empty - output folder will be created in the 1st location parent.')
-    parser.add_argument('-c', '--caption', help='Provide text caption for each file separated with |')
 
-    # Check if arguments are empty
-    try:
-        args = parser.parse_args()
-    except:
-        parser.print_help()
-        sys.exit()
-
-    locs = args.location.split()
-
-    print(f'LOCATIONS: {locs}')
-
-    # Check if caption is defined
-    captions = [i.strip() for i in args.caption.split('|')] if args.caption else ''
-
+def process_files(locs, captions, output=None):
     if captions:
         print(f'CAPTIONS: {captions}')
 
@@ -47,12 +27,12 @@ if __name__ == '__main__':
                 print(f'\t{cap}')
             raise Exception('\tNumber of captions should be the same as number of items.')
 
-    if Path(locs[0]).is_file():
-        # Define output folder
-        output = args.output if args.output else Path(locs[0]).parents[1] / OUTPUT_FOLDER
-        # Create output folder if not exists
-        os.makedirs(output, exist_ok=True)
+    # Define output folder
+    output = output if output else Path(locs[0]).parent / OUTPUT_FOLDER
+    # Create output folder if not exists
+    os.makedirs(output, exist_ok=True)
 
+    if Path(locs[0]).is_file():
         # Process single files provided
         if Path(locs[0]).suffix in IMG_FORMATS:
             # It's images, use process_image script
@@ -63,11 +43,6 @@ if __name__ == '__main__':
         else:
             print('Unknown file format.')
     else:
-        # Define output folder
-        output = Path(args.output) if args.output else Path(locs[0]).parent / OUTPUT_FOLDER
-        # Create output folder if not exists
-        os.makedirs(output, exist_ok=True)
-
         # Process multiple files in folder
         for item in Path(locs[0]).iterdir():
             img_locs = []
@@ -85,3 +60,31 @@ if __name__ == '__main__':
                 process_image.merge_images(img_locs, output, captions)
             elif vid_locs:
                 process_video.merge_videos(vid_locs, output, captions)
+
+
+if __name__ == '__main__':
+    # Parse arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument('location', help='Locations of files or folder with multiple files.')
+    parser.add_argument('-o', '--output', help='Output folder location. '
+                                               'If empty - output folder will be created in the 1st location parent.')
+    parser.add_argument('-c', '--caption', help='Provide text caption for each file separated with |')
+
+    # Check if arguments are empty
+    try:
+        args = parser.parse_args()
+    except:
+        parser.print_help()
+        sys.exit()
+
+    locations = args.location.split()
+    output_loc = args.output
+
+    print(f'LOCATIONS: {locations}')
+
+    # Check if caption is defined
+    caps = [i.strip() for i in args.caption.split('|')] if args.caption else ''
+
+    process_files(locations, caps, output_loc)
+
+
