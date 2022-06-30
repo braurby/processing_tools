@@ -18,9 +18,8 @@ def check_videos(videos):
             sys.exit(1)
 
 
-def merge_videos(locations, output, text=[]):
+def merge_videos(locations, output, text=None):
     videos = []
-    text = ' | '.join(text)
 
     # Check if videos input is correct
     check_videos(locations)
@@ -32,6 +31,7 @@ def merge_videos(locations, output, text=[]):
     output = Path(output) / Path(locations[0]).name
 
     if text:
+        text = ' | '.join(text)
         (
             ffmpeg
             .filter(videos, 'hstack', len(videos))  # hstack - horizontal, vstack - vertical
